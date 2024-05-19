@@ -61,5 +61,5 @@ app.post('/generate', (req, res) => {
 });
 
 app.listen(port, () => {
-    console.log(`Acronym to Abbreviation Generator API is running at http://localhost:${port}`);
+    console.log(`Acronym to Abbreviation Generator API is running at http://localhost:${port}  ${process.env.PORT}`);
 });
