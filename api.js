@@ -51,10 +51,10 @@ function validateAcronym(acronym) {
         return { valid: false, status: 400, error: 'Acronym Required' };
     }
     if (acronym.length > 10) {
-        return { valid: false, status: 422, error: 'Length Exceeded' };
+        return { valid: false, status: 400, error: 'Length Exceeded' };
     }
     if (acronym.toUpperCase() !== acronym.toLowerCase()) {
-        return { valid: false, status: 422, error: 'Invalid Characters' };
+        return { valid: false, status: 400, error: 'Invalid Characters' };
     }
     return { valid: true };
 }
