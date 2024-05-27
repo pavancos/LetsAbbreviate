@@ -32,7 +32,7 @@ const wordsList = {
     V: ['Vivacious', 'Vigilant', 'Vigorous', 'Visionary', 'Vivacious', 'Vigilant', 'Vigorous', 'Visionary', 'Vivacious', 'Vigilant', 'Vigorous', 'Visionary', 'Verdant', 'Vivacious', 'Vigilant', 'Vigorous', 'Visionary'],
     W: ['Witty', 'Wise', 'Whimsical', 'Warm', 'Wondrous', 'Witty', 'Wise', 'Whimsical', 'Warm', 'Wondrous', 'Witty', 'Wise', 'Whimsical', 'Warm', 'Wondrous', 'Witty', 'Wise', 'Whimsical', 'Warm', 'Wondrous'],
     X: ['Xenial', 'Xenodochial', 'Xenophilic', 'Xenagogue', 'Xenodochy', 'Xenogenetic', 'Xenotropic', 'Xenolalia', 'Xenophobic', 'Xyloid', 'Xanthic', 'Xylographic', 'Xenoplastic', 'Xanthous', 'Xenophilous'],
-    Y: ['Youthful', 'Yearning', 'Yielding', 'Yonder', 'Yummy', 'Yare'],  
+    Y: ['Youthful', 'Yearning', 'Yielding', 'Yonder', 'Yummy', 'Yare'],
     Z: ['Zealous', 'Zany', 'Zesty', 'Zippy', 'Zestful', 'Zingy']
 };
 
@@ -46,14 +46,28 @@ function getRandomWord(letter) {
     }
 }
 
+function validateAcronym(acronym) {
+    if (!acronym) {
+        return { valid: false, status: 400, error: 'Acronym Required' };
+    }
+    if (acronym.length > 10) {
+        return { valid: false, status: 422, error: 'Length Exceeded' };
+    }
+    if (acronym.toUpperCase() !== acronym.toLowerCase()) {
+        return { valid: false, status: 422, error: 'Invalid Characters' };
+    }
+    return { valid: true };
+}
+
 app.get('/', (req, res) => {
     res.send('Welcome to the Acronym to Abbreviation Generator API!');
 });
 
 app.post('/generate', (req, res) => {
     const { acronym } = req.body;
-    if (!acronym) {
-        return res.status(400).json({ error: 'Acronym is required' });
+    const validation = validateAcronym(acronym);
+    if (!validation.valid) {
+        return res.status(validation.status).json({ error: validation.error });
     }
 
     const abbreviation = acronym.split('').map(char => getRandomWord(char)).join(' ');
@@ -62,8 +76,9 @@ app.post('/generate', (req, res) => {
 
 app.post('/generate3', (req, res) => {
     const { acronym } = req.body;
-    if (!acronym) {
-        return res.status(400).json({ error: 'Acronym is required' });
+    const validation = validateAcronym(acronym);
+    if (!validation.valid) {
+        return res.status(validation.status).json({ error: validation.error });
     }
 
     const abbreviations = [];
