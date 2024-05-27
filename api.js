@@ -4,7 +4,7 @@ const cors = require('cors');
 const app = express();
 const port = process.env.PORT || 3000;
 
-app.use(cors({ origin: '*' }));
+app.use(cors());
 app.use(express.json());
 
 const wordsList = {
@@ -53,9 +53,6 @@ function validateAcronym(acronym) {
     if (acronym.length > 10) {
         return { valid: false, status: 400, error: 'Length Exceeded' };
     }
-    if (acronym.toUpperCase() !== acronym.toLowerCase()) {
-        return { valid: false, status: 400, error: 'Invalid Characters' };
-    }
     return { valid: true };
 }
 
@@ -72,22 +69,6 @@ app.post('/generate', (req, res) => {
 
     const abbreviation = acronym.split('').map(char => getRandomWord(char)).join(' ');
     res.json({ abbreviation });
-});
-
-app.post('/generate3', (req, res) => {
-    const { acronym } = req.body;
-    const validation = validateAcronym(acronym);
-    if (!validation.valid) {
-        return res.status(validation.status).json({ error: validation.error });
-    }
-
-    const abbreviations = [];
-    for (let i = 0; i < 3; i++) {
-        const abbreviation = acronym.split('').map(char => getRandomWord(char)).join(' ');
-        abbreviations.push(abbreviation);
-    }
-    
-    res.json({ abbreviations });
 });
 
 app.listen(port, () => {
