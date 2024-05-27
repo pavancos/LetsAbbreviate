@@ -7,6 +7,45 @@ const port = process.env.PORT || 3000;
 app.use(cors({ origin: '*' }));
 app.use(express.json());
 
+const wordsList = {
+    A: ['Astounding', 'Articulate', 'Astute', 'Audacious', 'Agile', 'Analytical', 'Affable', 'Abundant', 'Adventurous', 'Altruistic', 'Amiable', 'Adroit', 'Aromatic'],
+    B: ['Benevolent', 'Beautiful', 'Brainstorming', 'Buoyant', 'Breezy', 'Blissful', 'Balanced', 'Bracing', 'Brilliant', 'Breathy', 'Beaming', 'Brainy'],
+    C: ['Compassionate', 'Composed', 'Captivating', 'Cerebral', 'Conscientious', 'Courageous', 'Concise', 'Clever', 'Compelling', 'Cinematic', 'Cheerful', 'Charismatic', 'Clear-headed'],
+    D: ['Discreet', 'Dazzling', 'Decisive', 'Distinguished', 'Disciplined', 'Dreamy', 'Dynamic', 'Dauntless', 'Delightful', 'Diplomatic', 'Devoted'],
+    E: ['Effervescent', 'Erudite', 'Enigmatic', 'Eloquent', 'Empowering', 'Eager', 'Enthralling', 'Enthusiastic', 'Efficient', 'Ethereal', 'Eclectic', 'Exquisite', 'Exuberant', 'Efficacious'],
+    F: ['Forthright', 'Fascinating', 'Flourishing', 'Fair', 'Fragile', 'Fastidious', 'Fantastic', 'Focused', 'Fearless', 'Fickle', 'Frank', 'Fierce', 'Frugal', 'Fortuitous', 'Futuristic'],
+    G: ['Gregarious', 'Graceful', 'Gallant', 'Glimmering', 'Grandiose', 'Gigantic', 'Grounded', 'Gentle', 'Grateful'],
+    H: ['Hilarious', 'Harmonious', 'Healthy', 'Heroic', 'Hospitable', 'Headstrong', 'Heartfelt', 'Humorous', 'Honest', 'Honorable', 'Hearty', 'Hardy'],
+    I: ['Iridescent', 'Ingenious', 'Inventive', 'Independent', 'Intrepid', 'Immaculate', 'Intriguing', 'Impeccable', 'Inspiring', 'Intuitive'],
+    J: ['Jubilant', 'Juicy', 'Jazzy', 'Jaunty', 'Jovial', 'Judicious', 'Jolly'],
+    K: ['Keen-eyed', 'Kinetic', 'Keen-witted', 'Kindhearted', 'Knightly', 'Keen'],
+    L: ['Luscious', 'Lavish', 'Legendary', 'Lasting', 'Luminous', 'Literate', 'Lively', 'Loving'],
+    M: ['Mindful', 'Magnanimous', 'Melodic', 'Melancholic', 'Meticulous', 'Mercurial', 'Majestic', 'Magnetic', 'Marvelous', 'Meditative', 'Mighty', 'Monumental', 'Motivated', 'Mysterious', 'Multifaceted', 'Muscular', 'Musical', 'Mystifying', 'Magnificent'],
+    N: ['Nimble', 'Nurturing', 'Noble', 'Nostalgic', 'Nifty', 'Neighborly', 'Nimble', 'Nurturing', 'Noble', 'Nostalgic', 'Nifty', 'Neighborly', 'Natural', 'Nimble', 'Nurturing', 'Noble', 'Nostalgic', 'Nifty', 'Neighborly'],
+    O: ['Opulent', 'Optimistic', 'Open-minded', 'Observant', 'Original', 'Objective', 'Opulent', 'Optimistic', 'Open-minded', 'Observant', 'Original', 'Objective', 'Opulent', 'Optimistic', 'Open-minded', 'Observant', 'Original', 'Objective'],
+    P: ['Passionate', 'Precise', 'Perceptive', 'Positive', 'Productive', 'Poignant', 'Passionate', 'Precise', 'Perceptive', 'Positive', 'Productive', 'Poignant', 'Powerful', 'Passionate', 'Precise', 'Perceptive', 'Positive', 'Productive', 'Poignant'],
+    Q: ['Quixotic', 'Quick-witted', 'Quirky', 'Quiet', 'Quintessential', 'Quirkless', 'Quixotic', 'Quick-witted', 'Quirky', 'Quiet', 'Quintessential', 'Quirkless', 'Qualifying', 'Quixotic', 'Quick-witted', 'Quirky', 'Quiet', 'Quintessential', 'Quirkless'],
+    R: ['Resilient', 'Resourceful', 'Respectful', 'Radiant', 'Resolute', 'Refined', 'Resilient', 'Resourceful', 'Respectful', 'Radiant', 'Resolute', 'Refined', 'Relentless', 'Resilient', 'Resourceful', 'Respectful', 'Radiant', 'Resolute', 'Refined'],
+    S: ['Sophisticated', 'Serene', 'Spirited', 'Steadfast', 'Serene', 'Savvy', 'Sophisticated', 'Serene', 'Spirited', 'Steadfast', 'Serene', 'Savvy', 'Sophisticated', 'Serene', 'Spirited', 'Steadfast', 'Serene', 'Savvy'],
+    T: ['Tenacious', 'Thoughtful', 'Tenacious', 'Taciturn', 'Thorough', 'Tender', 'Tenacious', 'Thoughtful', 'Tenacious', 'Taciturn', 'Thorough', 'Tender', 'Timely', 'Tenacious', 'Thoughtful', 'Tenacious', 'Taciturn', 'Thorough', 'Tender'],
+    U: ['Unassuming', 'Unwavering', 'Unconventional', 'Uninhibited', 'Unbiased', 'Uplifting', 'Unassuming', 'Unwavering', 'Unconventional', 'Uninhibited', 'Unbiased', 'Uplifting', 'Unmatched', 'Unassuming', 'Unwavering', 'Unconventional', 'Uninhibited', 'Unbiased', 'Uplifting'],
+    V: ['Vivacious', 'Vigilant', 'Vigorous', 'Visionary', 'Vivacious', 'Vigilant', 'Vigorous', 'Visionary', 'Vivacious', 'Vigilant', 'Vigorous', 'Visionary', 'Verdant', 'Vivacious', 'Vigilant', 'Vigorous', 'Visionary'],
+    W: ['Witty', 'Wise', 'Whimsical', 'Warm', 'Wondrous', 'Witty', 'Wise', 'Whimsical', 'Warm', 'Wondrous', 'Witty', 'Wise', 'Whimsical', 'Warm', 'Wondrous', 'Witty', 'Wise', 'Whimsical', 'Warm', 'Wondrous'],
+    X: ['Xenial', 'Xenodochial', 'Xenophilic', 'Xenagogue', 'Xenodochy', 'Xenogenetic', 'Xenotropic', 'Xenolalia', 'Xenophobic', 'Xyloid', 'Xanthic', 'Xylographic', 'Xenoplastic', 'Xanthous', 'Xenophilous'],
+    Y: ['Youthful', 'Yearning', 'Yielding', 'Yonder', 'Yummy', 'Yare'],  
+    Z: ['Zealous', 'Zany', 'Zesty', 'Zippy', 'Zestful', 'Zingy']
+};
+
+function getRandomWord(letter) {
+    const upperLetter = letter.toUpperCase();
+    const words = wordsList[upperLetter];
+    if (words) {
+        return words[Math.floor(Math.random() * words.length)];
+    } else {
+        return upperLetter;
+    }
+}
+
 app.get('/', (req, res) => {
     res.send('Welcome to the Acronym to Abbreviation Generator API!');
 });
@@ -17,49 +56,25 @@ app.post('/generate', (req, res) => {
         return res.status(400).json({ error: 'Acronym is required' });
     }
 
-    const wordsList = {
-        A: ['Apple', 'Ant', 'Axe'],
-        B: ['Banana', 'Boat', 'Bee'],
-        C: ['Cat', 'Car', 'Cup'],
-        D: ['Dog', 'Duck', 'Door'],
-        E: ['Elephant', 'Eagle', 'Ear'],
-        F: ['Fox', 'Fish', 'Fan'],
-        G: ['Giraffe', 'Goat', 'Grapes'],
-        H: ['Horse', 'Hat', 'House'],
-        I: ['Igloo', 'Ice', 'Iron'],
-        J: ['Jaguar', 'Jelly', 'Jet'],
-        K: ['Kangaroo', 'Key', 'Kite'],
-        L: ['Lion', 'Lamp', 'Leaf'],
-        M: ['Monkey', 'Mouse', 'Moon'],
-        N: ['Nest', 'Net', 'Nail'],
-        O: ['Ostrich', 'Orange', 'Oven'],
-        P: ['Penguin', 'Piano', 'Pumpkin'],
-        Q: ['Quail', 'Queen', 'Quilt'],
-        R: ['Rabbit', 'Ring', 'Rocket'],
-        S: ['Snake', 'Star', 'Sun'],
-        T: ['Tiger', 'Table', 'Train'],
-        U: ['Umbrella', 'Unicorn', 'Urn'],
-        V: ['Vulture', 'Violin', 'Vase'],
-        W: ['Wolf', 'Whale', 'Watch'],
-        X: ['Xylophone', 'X-ray', 'Xerox'],
-        Y: ['Yak', 'Yacht', 'Yo-yo'],
-        Z: ['Zebra', 'Zoo', 'Zip']
-    };
-
-    function getRandomWord(letter) {
-        const upperLetter = letter.toUpperCase();
-        const words = wordsList[upperLetter];
-        if (words) {
-            return words[Math.floor(Math.random() * words.length)];
-        } else {
-            return upperLetter;
-        }
-    }
-
     const abbreviation = acronym.split('').map(char => getRandomWord(char)).join(' ');
     res.json({ abbreviation });
 });
 
+app.post('/generate3', (req, res) => {
+    const { acronym } = req.body;
+    if (!acronym) {
+        return res.status(400).json({ error: 'Acronym is required' });
+    }
+
+    const abbreviations = [];
+    for (let i = 0; i < 3; i++) {
+        const abbreviation = acronym.split('').map(char => getRandomWord(char)).join(' ');
+        abbreviations.push(abbreviation);
+    }
+    
+    res.json({ abbreviations });
+});
+
 app.listen(port, () => {
-    console.log(`Acronym to Abbreviation Generator API is running at http://localhost:${port}  ${process.env.PORT}`);
+    console.log(`Acronym to Abbreviation Generator API is running at http://localhost:${port}`);
 });
