@@ -71,6 +71,22 @@ app.post('/generate', (req, res) => {
     res.json({ abbreviation });
 });
 
+app.post('/generate3', (req, res) => {
+    const { acronym } = req.body;
+    const validation = validateAcronym(acronym);
+    if (!validation.valid) {
+        return res.status(validation.status).json({ error: validation.error });
+    }
+
+    const abbreviations = [];
+    for (let i = 0; i < 3; i++) {
+        const abbreviation = acronym.split('').map(char => getRandomWord(char)).join(' ');
+        abbreviations.push(abbreviation);
+    }
+
+    res.json({ abbreviations });
+});
+
 app.listen(port, () => {
     console.log(`Acronym to Abbreviation Generator API is running at http://localhost:${port}`);
 });
